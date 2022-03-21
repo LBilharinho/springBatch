@@ -23,13 +23,19 @@ public class BatchConfig {
 	private StepBuilderFactory stepBuildFactory;
 
 	public Job imprimeHelloJob() {
-		return jobBuilderFactory.get("imprimeHelloJob").start(imprimeHelloStep()).build();
+		return jobBuilderFactory
+				.get("imprimeHelloJob")
+				.start(imprimeHelloStep())
+				//.incrementer(new RunIdIncrementer())
+				.build();
 
 	}
 
 	@Bean
 	public Step imprimeHelloStep() {
-		return stepBuildFactory.get("imprimeHelloJob").tasklet(new Tasklet() {
+		return stepBuildFactory
+				.get("imprimeHelloStep")
+				.tasklet(new Tasklet() {
 
 			@Override
 			public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
