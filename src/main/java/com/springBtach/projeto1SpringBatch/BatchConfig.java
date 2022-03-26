@@ -16,44 +16,43 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/*@EnableBatchProcessing
+@EnableBatchProcessing
 @Configuration
 public class BatchConfig {
 	@Autowired
 	private JobBuilderFactory jobBuilderFactory;
 
 	@Autowired
-	private StepBuilderFactory stepBuildFactory;
+	private StepBuilderFactory stepBuilderFactory;
 
-	public Job imprimeHelloJob() {
-		return jobBuilderFactory
-				.get("imprimeHelloJob")
-				.start(imprimeHelloStep())
-				.incrementer(new RunIdIncrementer())
+	public Job imprimeHelloJob(Step imprimeHelloStep) {
+		return jobBuilderFactory.get("imprimeHelloJob").start(imprimeHelloStep).incrementer(new RunIdIncrementer())
 				.build();
 
 	}
 
 	@Bean
 	public Step imprimeHelloStep() {
-		return stepBuildFactory
-				.get("imprimeHelloStep")
-				.tasklet(imprimeHelloTasklet(null))
-				.build();
-
+		return stepBuilderFactory.get("imprimeHelloStep").tasklet(new Tasklet() {
+			@Override
+			public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
+				System.out.println("Hello");
+				return RepeatStatus.FINISHED;
+			}
+		}).build();
 	}
 
 	@Bean
 	@StepScope
-	public Tasklet imprimeHelloTasklet(@Value("#{jobParameters['nome']}")String nome) {
+	public Tasklet imprimeHelloTasklet(@Value("#{jobParameters['nome']}") String nome) {
 		return new Tasklet() {
 
-@Override
-public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-		System.out.println("Hello World");
-		return RepeatStatus.FINISHED;
-}
-};
+			@Override
+			public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
+				System.out.println("Hello World");
+				return RepeatStatus.FINISHED;
+			}
+		};
 	}
 
-}*/
+}
